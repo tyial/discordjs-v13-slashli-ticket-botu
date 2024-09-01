@@ -7,6 +7,7 @@ const GuildDatas = new JsonDatabase({ databasePath: "./Database/Guilds.json" })
 require("./Utils/eventLoader.js")(client)
 require("./Utils/slashHandler.js")(client)
 
+// Botu Kullanmadan README.md dosyasını okuyun!
 
 // TicketSystem ------------------------------------------------------------------------------------------------
 
@@ -1523,5 +1524,5 @@ process.on('uncaughtExceptionMonitor', (err, origin) => {
 });
 // CrashHandler ------------------------------------------------------------------------------------------------
 
-
+// Botu Kullanmadan README.md dosyasını okuyun!
 client.login(config.Token);
