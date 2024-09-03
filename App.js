@@ -65,7 +65,9 @@ client.on("interactionCreate", async (interaction) => {
                             embeds: [
                                 new MessageEmbed()
                                     .setTitle("⚠️ Hata!")
-                                    .setDescription(`⚠️ **Zaten bu sunucuda destek talebiniz bulunmaktadır.**\n✉️ **Talebinize <#${DejaUnChannel}>'a tıklayarak ulaşabilirsiniz.**\n👍 **Eğer erişiminiz yok ise yetkililerden destek talebinizi silmesini/tekrardan açmasını isteyiniz.**`)
+                                    .setDescription(`⚠️ **Zaten bu sunucuda destek talebiniz bulunmaktadır.**\n✉️ **Talebinize <#${Object.keys(GuildDatas.get(`${interaction.guild.id}.TicketSystem.Tickets`)).find(
+                                        (channel) => GuildDatas.get(`${interaction.guild.id}.TicketSystem.Tickets.${channel}.AuthorID`) === interaction.user.id
+                                    )}>'a tıklayarak ulaşabilirsiniz.**\n👍 **Eğer erişiminiz yok ise yetkililerden destek talebinizi silmesini/tekrardan açmasını isteyiniz.**`)
                                     .setFooter({ text: "Bu altyapı Tyial tarafından kodlanmış ve paylaşılmıştır." })
                                     .setColor("RED")
                             ],
@@ -306,6 +308,47 @@ client.on("interactionCreate", async (interaction) => {
         }
     }
     if (interaction.isButton()) {
+        if (interaction.customId.startsWith("ticketCreate-")) {
+            const trueValue = interaction.customId.split('-')[1];
+
+
+            if (GuildDatas.get(`${interaction.guild.id}.TicketSystem.Tickets`) && Object.keys(GuildDatas.get(`${interaction.guild.id}.TicketSystem.Tickets`)).find(
+                (channel) => GuildDatas.get(`${interaction.guild.id}.TicketSystem.Tickets.${channel}.AuthorID`) === interaction.user.id
+            )) {
+                await interaction.reply({
+                    embeds: [
+                        new MessageEmbed()
+                            .setTitle("⚠️ Hata!")
+                            .setDescription(`⚠️ **Zaten bu sunucuda destek talebiniz bulunmaktadır.**\n✉️ **Talebinize <#${Object.keys(GuildDatas.get(`${interaction.guild.id}.TicketSystem.Tickets`)).find(
+                                (channel) => GuildDatas.get(`${interaction.guild.id}.TicketSystem.Tickets.${channel}.AuthorID`) === interaction.user.id
+                            )}>'a tıklayarak ulaşabilirsiniz.**\n👍 **Eğer erişiminiz yok ise yetkililerden destek talebinizi silmesini/tekrardan açmasını isteyiniz.**`)
+                            .setFooter({ text: "Bu altyapı Tyial tarafından kodlanmış ve paylaşılmıştır." })
+                            .setColor("RED")
+                    ],
+                    ephemeral: true,
+                });
+                return interaction.message.edit({ ephemeral: false });
+            }
+
+            const reasonModal = new Modal()
+                .setCustomId(`reason-modal-${trueValue}`)
+                .setTitle('Sebep Belirtiniz');
+
+            const reasonInput = new TextInputComponent()
+                .setCustomId('reason-input')
+                .setLabel('Sebep:')
+                .setPlaceholder('Lütfen en az 10 karakterlik bir sebep belirtiniz')
+                .setStyle("PARAGRAPH")
+                .setMinLength(10)
+                .setMaxLength(200)
+                .setRequired(true);
+
+            const modalActionRow = new MessageActionRow().addComponents(reasonInput);
+            reasonModal.addComponents(modalActionRow);
+
+            await interaction.showModal(reasonModal);
+            await interaction.message.edit({ ephemeral: false });
+        }
         if (interaction.customId === "ticket-kapat") {
             let roleStaff = interaction.guild.roles.cache.get(GuildDatas.get(`${interaction.guild.id}.TicketSystem.Configure.StaffRoleID`));
             const channel = interaction.channel;
