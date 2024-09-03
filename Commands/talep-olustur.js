@@ -114,7 +114,7 @@ module.exports = {
               .setLabel(name)
               .setStyle("PRIMARY")
               .setEmoji("➡️")
-              .setCustomId(`ticketButton-${name}`)
+              .setCustomId(`ticketCreate-${name}`)
             );
             components = [new MessageActionRow().addComponents(...buttons)];
           } else if (seçim === 'menulu') {
