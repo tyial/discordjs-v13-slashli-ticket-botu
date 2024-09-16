@@ -24,7 +24,8 @@ Eğer botu glitch üzerinden çalıştırıyorsanız `package.json` dosyasını 
     "advanced-logs": "^2.1.3",
     "discord.js": "^13.6.0",
     "fs": "^0.0.1-security",
-    "wio.db": "^4.0.22"
+    "wio.db": "^4.0.22",
+    "discord-api-types": "^0.37.100"
   },
   "keywords": [
     "discord",
